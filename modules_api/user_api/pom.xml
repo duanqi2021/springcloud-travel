@@ -16,6 +16,7 @@
             <groupId>cn.dq</groupId>
             <artifactId>core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>

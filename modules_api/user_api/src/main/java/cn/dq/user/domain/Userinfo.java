@@ -1,21 +1,23 @@
 package cn.dq.user.domain;
 
-
-
-
-
-
+import cn.dq.user.handler.EncryptHandler;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 import java.io.Serializable;
 
 @Getter
 @Setter
-@TableName("userinfo")
+@AllArgsConstructor
+@NoArgsConstructor
+@TableName(value = "userinfo",autoResultMap = true)
 public class Userinfo implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -33,7 +35,9 @@ public class Userinfo implements Serializable {
     private String nickname;
 
     private String phone;
+
     private String email;
+    @TableField(typeHandler= EncryptHandler.class)
     private String password;
     private Integer gender =GENDER_SECRET;
     private Integer level=0;

@@ -14,14 +14,14 @@
 <body>
 <div class="wrapper"  id="app" v-cloak>
     <div class="container container-login">
-        <a href="javascript:;" title="返回首页" class="logo">狼行天下</a>
+        <a href="javascript:;" title="返回首页" class="logo">偷偷摸摸</a>
         <div class="signup-forms flip">
             <div class="login-box" id="_j_login_box">
                 <div class="inner inner_v2 clearfix">
                     <div class="inner_v2_left">
                         <form id="_j_login_form" action="javascript:;">
                             <div class="form-field">
-                                <input id="inputPhone" type="text" placeholder="您的手机号" autocomplete="off"  value="">
+                                <input id="inputPhone" type="text" placeholder="您的邮箱" autocomplete="off"  value="">
                                 <div class="err-tip"></div>
                             </div>
                             <div class="submit-btn">
@@ -29,7 +29,7 @@
                             </div>
                         </form>
                         <div class="agreement">
-                            注册视为同意<a target="_blank" href="javascript:;">《狼行天下用户使用协议》</a>
+                            注册视为同意<a target="_blank" href="javascript:;">《偷偷摸摸用户使用协议》</a>
                         </div>
                         <div class="connect">
                             <p class="hd">用合作网站账户直接登录</p>
@@ -42,7 +42,7 @@
                         </div>                        </div>
                     <div class="inner_v2_right">
                         <img src="/images/qrcode.jpg">
-                        <p>扫一扫<br>下载狼行天下APP</p>
+                        <p>扫一扫<br>下载偷偷摸摸APP</p>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                 <div class="add-info">
                     <div class="hd">账号注册</div>
                     <form  method="post" id="editForm">
-                        <input type="hidden" name="phone" value="" id="phone">
+                        <input type="hidden" name="email" value="" id="email">
                         <div class="form-field m-t-10">
                             <input name="nickname" type="text" placeholder="您的昵称" >
                             <div class="err-tip"></div>
@@ -67,7 +67,7 @@
                         <div class="form-field">
                             <div class="clearfix">
                                 <a href="#" class="vcode-send sms-code-send" @click="sendCode($event)">获取验证码</a>
-                                <input name="verifyCode" type="text" placeholder="短信验证码" autocomplete="off"class="vcode-input">
+                                <input name="verifyCode" type="text" placeholder="验证码" autocomplete="off"class="vcode-input">
                             </div>
                             <div class="err-tip clearfix"></div>
                         </div>

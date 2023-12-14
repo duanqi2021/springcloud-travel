@@ -15,21 +15,21 @@ var vue = new Vue({
             //  [3456789]  代码 3 4 5 6 7 8 9 中一个数
             //   /^1[3456789]\d{9}$/
 
-            if (/^1\d{10}$/g.test(val)) {
-                $.get(getServiceUrl("member") + "/userInfos/checkPhone", {phone:val}, function (data) {
+            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(val)) {
+                $.get(getServiceUrl("member") + "/userInfos/checkEmail", {email:val}, function (data) {
                    if(data.code == 200){
                        if(!data.data){
                            $('#inputPhone').next().text('').hide()
                            $('.login-box').hide()
                            $('.signup-box').show()
-                           $("#phone").val(val);
+                           $("#email").val(val);
                        }else{
-                           $('#inputPhone').next().text('手机号码已注册.').show()
+                           $('#inputPhone').next().text('邮箱已注册.').show()
                        }
                    }
                 })
             } else {
-                $('#inputPhone').next().text('手机号码格式不正确').show()
+                $('#inputPhone').next().text('邮箱格式不正确').show()
             }
         },
         //注册-发送短信
@@ -52,8 +52,8 @@ var vue = new Vue({
                     }
                 }, 1000);
 
-                var phone = $("#phone").val();
-                $.get(getServiceUrl("member") + "/userInfos/sendVerifyCode", {phone:phone}, function (data) {
+                var email = $("#email").val();
+                $.get(getServiceUrl("member") + "/userInfos/sendVerifyCode", {email:email}, function (data) {
                     if(data.code == 200){
                         popup("发送成功")
                     }else{
@@ -64,13 +64,20 @@ var vue = new Vue({
         },
         //注册-完成注册
         regist:function (){
-            $.post(getServiceUrl("member") + "/userInfos/regist", $("#editForm").serialize(), function (data) {
-                if(data.code == 200){
-                    location.href = "/login.html";
-                }else{
-                    popup(data.msg);
-                }
-            })
+            var ed = document.forms['editForm'];
+            if(ed.password.value!=ed.rpassword.value){
+                $('input[name="password"]').next().text('两次密码不一致').show();
+            }
+            else{
+                $.post(getServiceUrl("member") + "/userInfos/regist",$("#editForm").serialize(), function (data) {
+                    if(data.code == 200){
+                        location.href = "/login.html";
+                    }else{
+                        popup(data.msg);
+                    }
+                })
+            }
+
         }
     },
     mounted:function () {
