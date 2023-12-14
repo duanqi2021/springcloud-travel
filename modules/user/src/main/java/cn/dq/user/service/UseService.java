@@ -9,7 +9,7 @@ public interface UseService extends IService<Userinfo> {
 
     Userinfo findOneByEmail(String email);
 
-    void getCode(String email);
+    boolean getCode(String email);
 
     void regist(RegistUserVo userinfo);
 }

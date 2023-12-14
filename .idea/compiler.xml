@@ -11,6 +11,7 @@
         <module name="user" />
         <module name="gateway" />
         <module name="redis" />
+        <module name="email" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="core" options="-parameters" />
+      <module name="email" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="redis" options="-parameters" />
       <module name="user" options="-parameters" />

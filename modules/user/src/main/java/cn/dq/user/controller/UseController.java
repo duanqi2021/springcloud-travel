@@ -22,8 +22,7 @@ public class UseController {
     }
     @GetMapping ("/sendVerifyCode")
     public R<Boolean>  sendAndGetVerifyCode(@RequestParam("email") String email){
-        useService.getCode(email);
-        return R.ok();
+        return R.ok(useService.getCode(email));
     }
 
 

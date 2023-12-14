@@ -10,5 +10,6 @@ spring:
         #额外拉取 redis配置
         shared-configs:
           - data-id: redis-service-dev.yaml
+          - data-id: email-service-dev.yaml
   profiles:
     active: dev
