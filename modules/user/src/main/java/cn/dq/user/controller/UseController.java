@@ -32,6 +32,11 @@ public class UseController {
         return R.ok();
     }
 
+    @PostMapping("/login")
+    public R<?>  login(String username,String password){
+        return R.ok(useService.login(username,password));
+    }
+
 
 
 }
