@@ -17,10 +17,10 @@ public class MyRedisAutoConfiguration {
 
         // 使用StringRedisSerializer来序列化和反序列化redis的key值
         template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(RedisSerializer.string());
+        template.setValueSerializer(RedisSerializer.json());
 
         // Hash的key也采用StringRedisSerializer的序列化方式
-        template.setHashKeySerializer(RedisSerializer.json());
+        template.setHashKeySerializer(RedisSerializer.string());
         template.setHashValueSerializer(RedisSerializer.json());
 
         template.afterPropertiesSet();

@@ -1,5 +1,6 @@
 package cn.dq.redis.utils;
 
+import cn.dq.redis.key.KeyPrefix;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,6 +43,23 @@ public class RedisService
     public <T> void setCacheObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit)
     {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+    }
+
+    /**
+     * 缓存基本的对象，Integer、String、实体类等
+     *
+     * @param prefix 自定义拼装类
+     * @param value 缓存的值
+     * @param suffix 后缀
+     */
+    public <T> void setCacheObject(KeyPrefix prefix, final T value, final String... suffix)
+    {
+        if(prefix.getTimeout()>0){
+            this.setCacheObject(prefix.fullKey(suffix), value,prefix.getTimeout(),prefix.getUnit());
+        }else{
+            this.setCacheObject(prefix.fullKey(suffix), value);
+        }
+
     }
 
     /**

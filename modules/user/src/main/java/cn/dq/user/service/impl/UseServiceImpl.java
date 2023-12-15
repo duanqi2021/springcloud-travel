@@ -5,31 +5,46 @@ import cn.dq.email.service.EmailService;
 import cn.dq.excepiton.BusinessException;
 import cn.dq.user.domain.Userinfo;
 import cn.dq.user.mapper.UseMappser;
-import cn.dq.user.rediskey.UserRedisKeyPrefix;
 import cn.dq.user.service.UseService;
 import cn.dq.user.utils.ValidateCodeUtils;
 import cn.dq.redis.utils.RedisService;
+import cn.dq.user.vo.LoginUser;
 import cn.dq.user.vo.RegistUserVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static cn.dq.user.rediskey.UserRedisKeyPrefix.USER_LOGIN_INFO_KEY;
+import static cn.dq.user.rediskey.UserRedisKeyPrefix.USER_VERIFY_CODE_KEY;
+
 @Service
-@AllArgsConstructor
 public class UseServiceImpl extends ServiceImpl<UseMappser, Userinfo> implements UseService {
     public static final String MODE = "您正在注册 偷偷摸摸 网站用户，验证码为：%s,有效时间%s分钟，请尽快完成注册";
 
-    private final RedisService redisService;
+    private  RedisService redisService;
 
-    private final EmailService emailService;
+    private  EmailService emailService;
+
+    UseServiceImpl(RedisService redisService,EmailService emailService){
+        this.redisService=redisService;
+        this.emailService=emailService;
+    }
+
+    @Value("${jwt.signkey}")
+    public  String SIGN_KEY;
+
+
+    @Value("${jwt.expireTime}")
+    public  Long jwtExpireTime;
 
 
     @Override
@@ -43,7 +58,7 @@ public class UseServiceImpl extends ServiceImpl<UseMappser, Userinfo> implements
     public boolean getCode(String email) {
         String code = ValidateCodeUtils.generateValidateCode4String(6);
         //存在redis里面
-        redisService.setCacheObject(UserRedisKeyPrefix.KEY.fullKey(email),code,UserRedisKeyPrefix.KEY.getTimeout(), UserRedisKeyPrefix.KEY.getUnit());
+        redisService.setCacheObject(USER_VERIFY_CODE_KEY,code,email);
         //发送邮件
         EmailModel model=new EmailModel();
         model.setTitle("验证码");
@@ -61,14 +76,14 @@ public class UseServiceImpl extends ServiceImpl<UseMappser, Userinfo> implements
             throw new BusinessException("邮箱已注册");
         }
         //判断验证码
-        if(!userinfo.getVerifyCode().equals(redisService.getCacheObject(UserRedisKeyPrefix.KEY.fullKey(userinfo.getEmail())))){
+        if(!userinfo.getVerifyCode().equals(redisService.getCacheObject(USER_VERIFY_CODE_KEY.fullKey(userinfo.getEmail())))){
             throw new BusinessException("验证码错误");
         }
         //加密
         //转化
         save(RegistUserVo.psf(userinfo));
         //删除验证码
-        redisService.deleteObject(UserRedisKeyPrefix.KEY.fullKey(userinfo.getEmail()));
+        redisService.deleteObject(USER_VERIFY_CODE_KEY.fullKey(userinfo.getEmail()));
     }
 
     @Override
@@ -82,18 +97,32 @@ public class UseServiceImpl extends ServiceImpl<UseMappser, Userinfo> implements
         if(!one.getPassword().equals(password)){
             throw new BusinessException("密码错误");
         }
+        LoginUser loginUser=new LoginUser();
+        BeanUtils.copyProperties(one,loginUser);
         Map<String, Object> map=new HashMap<>();
         map.put("id",one.getId());
         map.put("nickname",one.getNickname());
-        map.put("loginTime",System.currentTimeMillis());
-        map.put("expireTime",30);
+        //登录时间
+        long nowTime=System.currentTimeMillis();
+        loginUser.setLoginTime(nowTime);
+        //过期时间
+        long expireTime=nowTime+(jwtExpireTime*60*1000);
+        loginUser.setExpireTime(expireTime);
+
+        //设置时间
+        USER_LOGIN_INFO_KEY.setTimeout(jwtExpireTime);
+        USER_LOGIN_INFO_KEY.setUnit(TimeUnit.MINUTES);
+        //用户过期时间存redis
+        redisService.setCacheObject(USER_LOGIN_INFO_KEY,loginUser,one.getId().toString());
+
+
         final String jwtToken = Jwts.builder()
                 .addClaims(map)
-                .signWith(SignatureAlgorithm.HS256, "yuio989891123gh")
+                .signWith(SignatureAlgorithm.HS256, SIGN_KEY)
                 .compact();
         map.clear();
         map.put("token",jwtToken);
-        map.put("user",one);
+        map.put("user",loginUser);
         return map;
     }
 }
