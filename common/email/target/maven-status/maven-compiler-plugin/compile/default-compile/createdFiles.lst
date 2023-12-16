@@ -1,0 +1,3 @@
+cn\dq\email\service\EmailService.class
+cn\dq\email\config\MyEmailAutoConfiguration.class
+cn\dq\email\po\EmailModel.class

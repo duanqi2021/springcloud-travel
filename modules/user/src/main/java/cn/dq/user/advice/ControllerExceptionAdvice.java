@@ -21,4 +21,5 @@ public class ControllerExceptionAdvice {
         log.warn("【统一异常处理】 拦截到业务异常,code={},msg={}",e.getCode(),e.getMessage());
         return R.error(e.getCode(),e.getMessage());
     }
+
 }

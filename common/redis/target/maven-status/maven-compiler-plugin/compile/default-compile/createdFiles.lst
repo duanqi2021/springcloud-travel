@@ -1,0 +1,4 @@
+cn\dq\redis\key\BaseKeyPrefix.class
+cn\dq\redis\key\KeyPrefix.class
+cn\dq\redis\config\MyRedisAutoConfiguration.class
+cn\dq\redis\utils\RedisService.class

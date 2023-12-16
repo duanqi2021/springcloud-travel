@@ -1,0 +1,6 @@
+cn\dq\auth\config\MyAuthAutoConfiguration.class
+cn\dq\auth\rediskey\UserRedisKeyPrefix.class
+cn\dq\auth\config\JwtProperties.class
+cn\dq\auth\anno\RequireLogin.class
+cn\dq\auth\config\WebConfig.class
+cn\dq\auth\interceptor\LoginInterceptor.class

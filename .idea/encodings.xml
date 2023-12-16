@@ -10,10 +10,13 @@
     <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/article/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules/user/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules/user/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules_api/article_api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules_api/article_api/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules_api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules_api/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules_api/user_api/src/main/java" charset="UTF-8" />

@@ -20,7 +20,7 @@ public class UseController {
     private final UseServiceImpl useService;
 
 
-    @RequireLogin
+    //@RequireLogin
     @GetMapping("/checkEmail")
     public R<Boolean> checkEmailExists(@RequestParam("email") String email){
         return R.ok(useService.findOneByEmail(email)!=null);

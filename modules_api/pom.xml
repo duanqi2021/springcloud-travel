@@ -15,6 +15,13 @@
     <description>管理api</description>
     <modules>
         <module>user_api</module>
+        <module>article_api</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>cn.dq</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

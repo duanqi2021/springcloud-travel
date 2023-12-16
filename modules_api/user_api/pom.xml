@@ -12,10 +12,6 @@
     <artifactId>user_api</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>cn.dq</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.baomidou</groupId>
