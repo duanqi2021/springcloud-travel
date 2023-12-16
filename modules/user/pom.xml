@@ -50,6 +50,12 @@
             <artifactId>email</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.dq</groupId>
+            <artifactId>auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

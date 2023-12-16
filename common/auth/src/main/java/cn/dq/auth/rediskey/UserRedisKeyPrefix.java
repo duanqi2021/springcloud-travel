@@ -1,4 +1,4 @@
-package cn.dq.user.rediskey;
+package cn.dq.auth.rediskey;
 
 import cn.dq.redis.key.BaseKeyPrefix;
 

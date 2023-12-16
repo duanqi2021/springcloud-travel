@@ -1,6 +1,7 @@
 package cn.dq.user.controller;
 
 
+import cn.dq.auth.anno.RequireLogin;
 import cn.dq.user.service.impl.UseServiceImpl;
 import cn.dq.user.vo.RegistUserVo;
 import cn.dq.utils.R;
@@ -10,12 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 
+
+
 @RestController
 @RequestMapping("/userInfos")
 @AllArgsConstructor
 public class UseController {
     private final UseServiceImpl useService;
 
+
+    @RequireLogin
     @GetMapping("/checkEmail")
     public R<Boolean> checkEmailExists(@RequestParam("email") String email){
         return R.ok(useService.findOneByEmail(email)!=null);

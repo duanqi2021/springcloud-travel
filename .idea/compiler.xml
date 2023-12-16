@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="user_api" />
+        <module name="auth" />
         <module name="user" />
         <module name="gateway" />
         <module name="redis" />
@@ -20,6 +21,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth" options="-parameters" />
       <module name="core" options="-parameters" />
       <module name="email" options="-parameters" />
       <module name="gateway" options="-parameters" />

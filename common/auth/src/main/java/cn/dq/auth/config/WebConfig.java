@@ -1,6 +1,7 @@
-package cn.dq.user.config;
+package cn.dq.auth.config;
 
-import cn.dq.user.interceptor.LoginInterceptor;
+
+import cn.dq.auth.interceptor.LoginInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,8 +15,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        //不进入拦截
         registry.addInterceptor(loginInterceptor)
-                .excludePathPatterns("/userInfos/login")
+        //        .excludePathPatterns("/userInfos/*")
                 .addPathPatterns("/**");
     }
 }

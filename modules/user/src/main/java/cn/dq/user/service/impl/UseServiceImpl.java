@@ -1,5 +1,6 @@
 package cn.dq.user.service.impl;
 
+import cn.dq.auth.config.JwtProperties;
 import cn.dq.email.po.EmailModel;
 import cn.dq.email.service.EmailService;
 import cn.dq.excepiton.BusinessException;
@@ -15,36 +16,31 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static cn.dq.user.rediskey.UserRedisKeyPrefix.USER_LOGIN_INFO_KEY;
-import static cn.dq.user.rediskey.UserRedisKeyPrefix.USER_VERIFY_CODE_KEY;
+import static cn.dq.auth.rediskey.UserRedisKeyPrefix.USER_LOGIN_INFO_KEY;
+import static cn.dq.auth.rediskey.UserRedisKeyPrefix.USER_VERIFY_CODE_KEY;
+
 
 @Service
+@AllArgsConstructor
 public class UseServiceImpl extends ServiceImpl<UseMappser, Userinfo> implements UseService {
     public static final String MODE = "您正在注册 偷偷摸摸 网站用户，验证码为：%s,有效时间%s分钟，请尽快完成注册";
 
-    private  RedisService redisService;
+    private  final RedisService redisService;
 
-    private  EmailService emailService;
-
-    UseServiceImpl(RedisService redisService,EmailService emailService){
-        this.redisService=redisService;
-        this.emailService=emailService;
-    }
-
-    @Value("${jwt.signkey}")
-    public  String SIGN_KEY;
+    private  final EmailService emailService;
 
 
-    @Value("${jwt.expireTime}")
-    public  Long jwtExpireTime;
+    private  final JwtProperties jwtProperties;
+
 
 
     @Override
@@ -100,25 +96,27 @@ public class UseServiceImpl extends ServiceImpl<UseMappser, Userinfo> implements
         LoginUser loginUser=new LoginUser();
         BeanUtils.copyProperties(one,loginUser);
         Map<String, Object> map=new HashMap<>();
-        map.put("id",one.getId());
-        map.put("nickname",one.getNickname());
+        //这里使用uuid 不用用户Id是为了过期考虑
+        //如果过期了的token 使用id输入redis 还是可以登录
+        String uuid= UUID.randomUUID().toString();
+        map.put("uuid",uuid);
         //登录时间
         long nowTime=System.currentTimeMillis();
         loginUser.setLoginTime(nowTime);
         //过期时间
-        long expireTime=nowTime+(jwtExpireTime*60*1000);
+        long expireTime=nowTime+(jwtProperties.getExpireTime()*60*1000);
         loginUser.setExpireTime(expireTime);
 
         //设置时间
-        USER_LOGIN_INFO_KEY.setTimeout(jwtExpireTime);
+        USER_LOGIN_INFO_KEY.setTimeout(jwtProperties.getExpireTime());
         USER_LOGIN_INFO_KEY.setUnit(TimeUnit.MINUTES);
         //用户过期时间存redis
-        redisService.setCacheObject(USER_LOGIN_INFO_KEY,loginUser,one.getId().toString());
+        redisService.setCacheObject(USER_LOGIN_INFO_KEY,loginUser,uuid);
 
 
         final String jwtToken = Jwts.builder()
                 .addClaims(map)
-                .signWith(SignatureAlgorithm.HS256, SIGN_KEY)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSignkey())
                 .compact();
         map.clear();
         map.put("token",jwtToken);
